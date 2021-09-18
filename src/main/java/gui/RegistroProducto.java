@@ -15,6 +15,7 @@ import java.awt.Color;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
@@ -22,10 +23,12 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Producto;
+import modelo.Usuario;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Cursor;
 
@@ -229,5 +232,23 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		em.close();
 		
 		
+	}
+	public void listar() {
+	EntityManagerFactory fabrica=Persistence.createEntityManagerFactory("mysql");
+		
+		//2.Obtener el DAO
+		EntityManager em=fabrica.createEntityManager();
+	
+		TypedQuery<Usuario> query=em.createQuery("Select p  from Producto p", Usuario.class);
+		List<Usuario> lstUsuarios= query.getResultList();
+		System.out.println("Cantidad de usuarios: "+ lstUsuarios.size());
+		if(lstUsuarios.size()==0) {
+			System.out.println("Listado vacio");
+		}else {
+			for(Usuario u: lstUsuarios) {
+				System.out.println(">>> "+u);
+			}
+		}
+		em.close();
 	}
 }
